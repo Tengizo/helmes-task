@@ -1,0 +1,65 @@
+<mat-toolbar color="primary">Helmes Task</mat-toolbar>
+
+<h3>Please enter your name and pick the Sectors you are currently involved in. </h3>
+<mat-card fxLayout="row" fxLayoutAlign="stretch">
+  <form class="example-form" fxFlexAlign="start" [formGroup]="form" fxLayout="column" fxLayoutGap="32px"
+        fxFlex="0.5 0 auto" (submit)="saveUser()" #formElement="ngForm">
+    <h4 *ngIf="addedSuccessfully" style="color: #65a02d;">User added successfully</h4>
+    <h4 *ngIf="updatedSuccessfully" style="color: #65a02d;">User updated successfully</h4>
+    <mat-form-field class="example-full-width">
+      <input matInput [formControlName]="'name'" placeholder="Name">
+      <mat-error align="start"
+                 *ngIf="form.get('name').touched&&form.get('name').hasError(errors.FIELD_IS_REQUIRED.formError)">
+        {{errors.FIELD_IS_REQUIRED.errorText}}
+      </mat-error>
+      <mat-error align="start"
+                 *ngIf="
+                 form.get('name').touched &&
+                 (
+                   form.get('name').hasError(errors.INVALID_LENGTH.formError1) ||
+                   form.get('name').hasError(errors.INVALID_LENGTH.formError2)
+                 )">
+        {{errors.INVALID_LENGTH.errorText}}
+      </mat-error>
+      <mat-error align="start"
+                 *ngIf="form.get('name').touched&&form.get('name').hasError(errors.NAME_IS_USED.formError)">
+        {{errors.NAME_IS_USED.errorText}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Sector" multiple [formControlName]="'sectorIds'">
+        <mat-option *ngFor="let sector of sectorOptions" [value]="sector.id">
+          {{getSectorNameWithSpaces(sector)}}
+        </mat-option>
+      </mat-select>
+      <mat-error align="start" *ngIf="form.get('sectorIds').hasError(errors.FIELD_IS_REQUIRED.formError)">
+        {{errors.FIELD_IS_REQUIRED.errorText}}
+      </mat-error>
+    </mat-form-field>
+    <mat-checkbox [formControlName]="'agreeToTerms'" aria-label="Agree to terms">Agree to terms</mat-checkbox>
+    <mat-error align="start"
+               *ngIf="form.get('agreeToTerms').hasError(errors.TERMS_NOT_AGREED.formError)">
+      {{errors.TERMS_NOT_AGREED.errorText}}
+    </mat-error>
+    <button *ngIf="!loadedUser" mat-raised-button type="submit">Save</button>
+    <button *ngIf="loadedUser" mat-raised-button type="submit">Update</button>
+  </form>
+  <div class="example-form" fxLayout="column" fxLayoutAlign="start end" fxLayoutGap="32px"
+       fxFlex="0.4 0 auto">
+    <mat-form-field class="example-full-width">
+      <input matInput [formControl]="nameForLoadControl" placeholder="Name">
+      <mat-error align="start"
+                 *ngIf="nameForLoadControl.touched && nameForLoadControl.hasError(errors.FIELD_IS_REQUIRED.formError)">
+        {{errors.FIELD_IS_REQUIRED.errorText}}
+      </mat-error>
+      <mat-error align="start"
+                 *ngIf="nameForLoadControl.touched && nameForLoadControl.hasError(errors.USER_NOT_FOUND.formError)">
+        {{errors.USER_NOT_FOUND.errorText}}
+      </mat-error>
+    </mat-form-field>
+    <section fxLayoutGap="10px" fxLayout="row">
+      <button mat-raised-button (click)="loadUser()">Load</button>
+      <button mat-raised-button (click)="reset()">Reset</button>
+    </section>
+  </div>
+</mat-card>
