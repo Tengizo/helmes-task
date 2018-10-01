@@ -1,4 +1,6 @@
 # helmes-task
+Project is built using spring-boot and Angular 6
+
 
 instructions for running
 
