@@ -3,6 +3,7 @@ package com.helmes.task.services.impl;
 import com.helmes.task.persistence.model.Sector;
 import com.helmes.task.persistence.repository.SectorRepository;
 import com.helmes.task.services.SectorService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class SectorServiceImpl implements SectorService {
         this.sectorRepository = sectorRepository;
     }
 
+    @Cacheable(cacheNames = "sectors")
     @Override
     public List<Sector> getAll() {
         return sectorRepository.findAll();
